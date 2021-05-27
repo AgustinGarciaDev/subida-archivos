@@ -5,6 +5,7 @@ require('./models/database')
 const Amigo = require('./models/Amigo')
 const path = require('path')
 const fileUpload = require('express-fileupload')
+const fs = require('fs')
 
 const app = express()
 
@@ -40,6 +41,16 @@ app.post('/amigos', async (req, res) => {
        res.json({success: true})
    })
    
+})
+
+app.delete('/amigos', (req, res) => {
+    // const fotoBorrar = '60affd287476c00015f0b7ba.jpg'
+    fs.unlink(`${__dirname}/client/build/fotos/${fotoBorrar}`, err => {
+        if (err) {
+            return res.json({success: false, err})
+        }
+        res.json({success: true, mensaje: "Borrado!"})
+    })
 })
 
 if (process.env.NODE_ENV === 'production') {
