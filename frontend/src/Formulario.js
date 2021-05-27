@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import axios from 'axios'
+import {API} from './API'
 
 const Formulario = (props) => {
 
@@ -16,7 +17,7 @@ const Formulario = (props) => {
 
     const enviarAmigo = async (e) => {
         e.preventDefault()
-        await axios.post('http://localhost:4000/amigos', nuevoAmigo)
+        await axios.post(`${API}/amigos`, nuevoAmigo)
         props.setReload(!props.reload)
         setNuevoAmigo({nombre: '', foto: ''})
     }

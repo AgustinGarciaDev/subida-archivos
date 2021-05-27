@@ -1,10 +1,11 @@
 import React, { useEffect, useState } from 'react'
+import {API} from './API'
 
 const Amigos = (props) => {
     const [amigos, setAmigos] = useState([])
 
     useEffect(() => {
-        fetch('http://localhost:4000/amigos')
+        fetch(`${API}/amigos`)
         .then(res => res.json())
         .then(data => setAmigos(data.respuesta))
     }, [props.reload])
