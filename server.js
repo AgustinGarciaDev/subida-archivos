@@ -43,8 +43,8 @@ app.post('/amigos', async (req, res) => {
    
 })
 
-app.delete('/amigos', (req, res) => {
-    // const fotoBorrar = '60affd287476c00015f0b7ba.jpg'
+app.delete('/amigos/:id', (req, res) => {
+    const fotoBorrar = `${req.params.id}.jpg`
     fs.unlink(`${__dirname}/client/build/fotos/${fotoBorrar}`, err => {
         if (err) {
             return res.json({success: false, err})
