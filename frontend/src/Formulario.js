@@ -4,7 +4,8 @@ import {API} from './API'
 
 const Formulario = (props) => {
 
-    const [nuevoAmigo, setNuevoAmigo] = useState({nombre: '', foto: ''})
+    const [nuevoAmigo, setNuevoAmigo] = useState({nombre: ''})
+    const [fotoAmigo, setFotoAmigo] = useState({foto: ''})
     
     const leerInput = (e) => {
         const valor = e.target.value
@@ -15,9 +16,16 @@ const Formulario = (props) => {
         })
     }
 
+    const cargarFoto = e => {
+        setFotoAmigo({foto: e.target.files[0]})
+    }
+
     const enviarAmigo = async (e) => {
         e.preventDefault()
-        await axios.post(`${API}/amigos`, nuevoAmigo)
+        const formData = new FormData()
+        formData.append('nombre', nuevoAmigo.nombre)
+        formData.append('foto', fotoAmigo.foto)
+        await axios.post(`${API}/amigos`, formData)
         props.setReload(!props.reload)
         setNuevoAmigo({nombre: '', foto: ''})
     }
@@ -27,8 +35,7 @@ const Formulario = (props) => {
             <form onSubmit={enviarAmigo}>
                 <input type="text" name="nombre" id="nombre" placeholder="Nombre del amigo"
                 onChange={leerInput} value={nuevoAmigo.nombre} />
-                <input type="text" name="foto" id="foto" placeholder="Foto del amigo" 
-                onChange={leerInput} value={nuevoAmigo.foto} />
+                <input type="file" name="foto" id="foto" onChange={cargarFoto} />
                 <input type="submit" value="Enviar Amigo" />
             </form>
         </div>

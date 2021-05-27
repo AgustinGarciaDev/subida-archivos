@@ -4,11 +4,15 @@ require('dotenv').config()
 require('./models/database')
 const Amigo = require('./models/Amigo')
 const path = require('path')
+const fileUpload = require('express-fileupload')
 
 const app = express()
 
 app.use(express.json())
+app.use(fileUpload())
 app.use(cors())
+
+app.use(express.static('fotos'))
 
 app.get('/amigos', async (req, res) => {
     const amigos = await Amigo.find()
@@ -16,10 +20,26 @@ app.get('/amigos', async (req, res) => {
 })
 
 app.post('/amigos', async (req, res) => {
-    const { nombre, foto } = req.body
-    const nuevoAmigo = new Amigo({nombre, foto})
-    await nuevoAmigo.save()
-    res.json({success: true, respuesta: nuevoAmigo})
+   const {nombre} = req.body
+   const {foto} = req.files
+
+   const nuevoAmigo = new Amigo({nombre})
+   const {_id} = nuevoAmigo
+
+   const fileName = _id + "." + foto.name.split(".")[foto.name.split(".").length-1]
+   const ruta = `${__dirname}/frontend/src/fotos/${fileName}`   
+
+   nuevoAmigo.foto = '/fotos/' + fileName
+   await nuevoAmigo.save()
+
+   foto.mv(ruta, err => {
+       console.log(err)
+       if (err) {
+           return res.json({success: false, respuesta: "Hubo un error al grabar el archivo"})
+       }
+       res.json({success: true})
+   })
+   
 })
 
 if (process.env.NODE_ENV === 'production') {
