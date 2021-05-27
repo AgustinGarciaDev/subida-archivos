@@ -27,7 +27,7 @@ app.post('/amigos', async (req, res) => {
    const {_id} = nuevoAmigo
 
    const fileName = _id + "." + foto.name.split(".")[foto.name.split(".").length-1]
-   const ruta = `${__dirname}/frontend/src/fotos/${fileName}`   
+   const ruta = `${__dirname}/client/build/fotos/${fileName}`   
 
    nuevoAmigo.foto = '/fotos/' + fileName
    await nuevoAmigo.save()
